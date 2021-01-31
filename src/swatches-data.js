@@ -2,25 +2,22 @@ module.exports = [
   {
     id: 1,
     name: "Basic",
-    color_primary: "000000",
-    color_secondary: "FEFEFE",
-    font_primary: "Helvetica Neue",
-    font_secondary: null
+    color_primary: "#000000",
+    color_secondary: "#e2c223",
+    font_primary: "Open Sans"
   },
   {
     id: 2,
     name: "Best",
-    color_primary: "000000",
-    color_secondary: "A0A23B",
-    font_primary: "Georgia",
-    font_secondary: null
+    color_primary: "#000000",
+    color_secondary: "#A0A23B",
+    font_primary: "Work Sans"
   },
   {
     id: 3,
     name: "Worst",
-    color_primary: "000000",
-    color_secondary: "A0A23B",
-    font_primary: "Arial",
-    font_secondary: null
+    color_primary: "#223222",
+    color_secondary: "#BA2122",
+    font_primary: "Source Code Pro"
   },
 ];
