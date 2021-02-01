@@ -4,5 +4,5 @@ module.exports = {
   API_TOKEN: process.env.API_TOKEN,
   DATABASE_URL: process.env.REACT_APP_DATABASE_URL ||
     "http://localhost:8000/api",
-  CLIENT_ORIGIN: process.env.CLIENT_ORIGIN || 'http://localhost:3000'
+  CLIENT_ORIGIN: process.env.CLIENT_ORIGIN || 'https://swatch-ui.vercel.app/'
 }
