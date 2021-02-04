@@ -8,7 +8,7 @@ module.exports = [
   },
   {
     id: 2,
-    name: "Best",
+    name: "WOWOWOWWOWO",
     color_primary: "#000000",
     color_secondary: "#A0A23B",
     font_primary: "Work Sans"
