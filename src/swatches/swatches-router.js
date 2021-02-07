@@ -76,9 +76,11 @@ swatchesRouter
         res.status(204).end()
       })
       .catch(next)
+    console.log(`Swatch ${id} deleted from db`)
   })
+
   .patch(bodyParser, (req, res, next) => {
-      const { name, color_primary, color_secondary, font_primary = [] } = req.body;
+      const { name, color_primary, color_secondary, font_primary } = req.body;
       const swatchToUpdate = { name, color_primary, color_secondary, font_primary }
   
       const numberOfValues = Object.values(swatchToUpdate).filter(Boolean).length
@@ -90,8 +92,6 @@ swatchesRouter
           }
         })
       }
-  
-      if (error) return res.status(400).send(error)
   
       SwatchesService.updateSwatch(
         req.app.get('db'),
