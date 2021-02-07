@@ -1,3 +1,4 @@
+const path = require('path')
 const express = require('express')
 const { v4: uuid } = require('uuid')
 const logger = require('../logger')
@@ -5,37 +6,45 @@ const logger = require('../logger')
 const swatchesRouter = express.Router()
 const bodyParser = express.json()
 
-const swatches = require('../swatches-data.js')
+const SwatchesService = require('./swatches-service')
 
 swatchesRouter
   .route('/api/swatches')
-  .get((req, res) => {
+
+  .get((req, res, next) => {
     // move implementation logic here
-    res.json(swatches);
+    SwatchesService.getAllSwatches(req.app.get('db'))
+      .then(swatches => {
+        res.json(swatches)
+      })
+      .catch(next)
   })
-  .post(bodyParser, (req, res) => {
+  .post(bodyParser, (req, res, next) => {
     // move implementation logic here
-    const { color_primary, color_secondary, font_primary, font_secondary = [] } = req.body;
+    const { name, color_primary, color_secondary, font_primary } = req.body;
 
     // get an id
     const id = uuid();
   
-    const swatch = {
-      id,
+    const newSwatch = {
+      name,
       color_primary,
       color_secondary,
       font_primary,
-      font_secondary
     };
   
-    swatches.push(swatch);
-  
-    logger.info(`Swatch with id ${id} created`);
-  
-    res
-      .status(201)
-      .location(`http://localhost:8000/api/swatches/${id}`)
-      .json({id});
+    SwatchesService.insertSwatch(
+      req.app.get('db'),
+      newSwatch
+    )
+      .then(swatch => {
+        logger.info(`Swatch with id ${id} created`);
+        res
+          .status(201)
+          .location(`http://localhost:8000/api/swatches/${id}`)
+          .json(swatch);
+      })
+      .catch(next)
   })
 
 swatchesRouter
@@ -55,25 +64,44 @@ swatchesRouter
   
     res.json(swatch);
   })
-  .delete((req, res) => {
+  .delete((req, res, next) => {
     // move implementation logic here
     const { id } = req.params;
-
-    const swatchIndex = swatches.findIndex(c => c.id == id);
-
-    if (swatchIndex === -1) {
-      logger.error(`Swatch with id ${id} not found.`);
-      return res
-        .status(404)
-        .send('Not found');
-    }
-
-    swatches.splice(swatchIndex, 1);
-
-    logger.info(`Swatch with id ${id} deleted.`);
-    res
-      .status(204)
-      .end();
+    SwatchesService.deleteBookmark(
+      req.app.get('db'),
+      id
+    )
+      .then(numRowsAffected => {
+        logger.info(`Swatch with id ${id} deleted.`)
+        res.status(204).end()
+      })
+      .catch(next)
+  })
+  .patch(bodyParser, (req, res, next) => {
+      const { name, color_primary, color_secondary, font_primary = [] } = req.body;
+      const swatchToUpdate = { name, color_primary, color_secondary, font_primary }
+  
+      const numberOfValues = Object.values(swatchToUpdate).filter(Boolean).length
+      if (numberOfValues === 0) {
+        logger.error(`Invalid update without required fields`)
+        return res.status(400).json({
+          error: {
+            message: `Request body must include 'name'`
+          }
+        })
+      }
+  
+      if (error) return res.status(400).send(error)
+  
+      SwatchesService.updateSwatch(
+        req.app.get('db'),
+        req.params.id,
+        swatchToUpdate
+      )
+        .then(numRowsAffected => {
+          res.status(204).end()
+        })
+        .catch(next)
     })
 
 module.exports = swatchesRouter
