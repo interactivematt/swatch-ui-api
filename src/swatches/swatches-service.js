@@ -12,7 +12,7 @@ const SwatchesService = {
         return rows[0]
       })
   },
-  deleteBookmark(knex, id) {
+  deleteSwatch(knex, id) {
     return knex('swatches')
       .where({ id })
       .delete()

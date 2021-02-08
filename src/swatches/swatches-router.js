@@ -49,25 +49,11 @@ swatchesRouter
 
 swatchesRouter
   .route('/api/swatches/:id')
-  .get((req, res) => {
-    // move implementation logic here
-    const { id } = req.params;
-    const swatch = swatches.find(c => c.id == id);
   
-    // make sure we found a card
-    if (!swatch) {
-      logger.error(`Swatch with id ${id} not found.`);
-      return res
-        .status(404)
-        .send('Swatch Not Found');
-    }
-  
-    res.json(swatch);
-  })
   .delete((req, res, next) => {
     // move implementation logic here
     const { id } = req.params;
-    SwatchesService.deleteBookmark(
+    SwatchesService.deleteSwatch(
       req.app.get('db'),
       id
     )
