@@ -62,7 +62,6 @@ swatchesRouter
         res.status(204).end()
       })
       .catch(next)
-    console.log(`Swatch ${id} deleted from db`)
   })
 
   .patch(bodyParser, (req, res, next) => {
