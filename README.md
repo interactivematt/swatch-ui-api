@@ -7,3 +7,9 @@
 #### Success responses:
 `200`
 
+#### Technology used:
+- Node.js
+- Express
+- Knex
+- Heroku
+- PostgreSQL
